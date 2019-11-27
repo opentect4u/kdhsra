@@ -1,0 +1,1 @@
+[14-Feb-2019 11:28:18 UTC] PHP Fatal error:  Out of memory (allocated 1572864) (tried to allocate 12288 bytes) in /home/opentech4uco/public_html/rahara/system/helpers/url_helper.php on line 417
