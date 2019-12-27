@@ -256,7 +256,8 @@
         public function sw_collectionReport($academic_yr, $class_name, $stu_sec, $roll_no)
         {
 
-            $sql = $this->db->query(" SELECT a.trans_dt, b.fees_amount, c.fees_name  FROM td_fees_collection a, td_fees_collection_details b, md_fees c
+            $sql = $this->db->query(" SELECT a.trans_dt,a.trans_cd,a.fees_month,a.fees_year,b.fees_amount, c.fees_name,a.created_dt 
+                                      FROM td_fees_collection a, td_fees_collection_details b, md_fees c
                                     WHERE a.trans_dt = b.trans_dt AND a.trans_cd = b.trans_cd AND b.fees_type_id = c.sl_no 
                                     AND fees_year = '$academic_yr' AND stu_class = '$class_name' AND stu_sec = '$stu_sec' AND roll_no = $roll_no
                                     ORDER BY a.trans_dt ");

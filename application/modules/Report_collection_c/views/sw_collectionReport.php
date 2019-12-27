@@ -90,10 +90,13 @@
 
             <thead style = "text-align: center">
                 <tr>
-                    <td><strong>Date</strong></td>
+                    <td><strong>Value Date</strong></td>
+                    <td><strong>ID</strong></td>
+                    <td><strong>Month</strong></td>
+                    <td><strong>Year</strong></td>
                     <td><strong>Fees</strong></td>
                     <td><strong>Amount(Rs.)</strong></td>
-
+                    <td><strong>Created Date</strong></td>
                 </tr>
             </thead>
 
@@ -105,9 +108,12 @@
                 <tr>
 
                     <td><?php echo date('d-m-Y',strtotime($row->trans_dt)); ?></td>
+                    <td><?php echo($row->trans_cd); ?></td>
+                    <td><?php echo($row->fees_month); ?></td>
+                    <td><?php echo($row->fees_year); ?></td>
                     <td><?php echo($row->fees_name); ?></td>
                     <td><?php echo($row->fees_amount); ?></td>
-
+                    <td><?php echo($row->created_dt); ?></td>
                 </tr>
 
             <?php
@@ -121,7 +127,7 @@
                     <td colspan="2" style="text-align: center;">
                        TOTAL:
                     </td>
-                    <td colspan="1" style="text-align: center;">
+                    <td colspan="4" style="text-align: right;">
                         <strong><?php echo "Rs.  ".$total->total; ?></strong>
                     </td>
                 </tr>
