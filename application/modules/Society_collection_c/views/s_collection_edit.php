@@ -9,8 +9,9 @@
 <div class="panel panel-default">
 
     <div class="panel-heading">
-    <p style="text-align: left; width:49%; display: inline-block;">Edit Collection Entry</p>
-        <p style="text-align: right; width:50%;  display: inline-block;">Date: <?php echo date('d/m/y');?> </p>
+        <p style="text-align: left; width:49%; display: inline-block;">Edit Collection Type</p>
+        <p style="text-align: right; width:50%;  display: inline-block;">Date: <?php echo date('d/m/Y');?> </p>
+    
     </div>
 
     <div class="panel-body">
@@ -19,24 +20,19 @@
 
                 <form role="form" method="POST" action= " <?php echo site_url('Society_collection_c/edit') ?>" >
 
-                <?php 
-                foreach($data as $row)
-                {  ?>
-                    
-                    <input type="hidden" name="sl_no" value=" <?php echo($row->sl_no); ?> ">
-                    
                     <div class="form-group">
-                        <label>Collections</label>
-                        <input class="form-control" name="collections" value= "<?php echo($row->collections); ?>" required>
+                        <label>Sl.No.</label>
+                        <input class="form-control" name="sl_no" value="<?php echo $data->sl_no; ?>" readonly>
+                    </div>
+            
+                    <div class="form-group">
+                        <label>Collection Type</label>
+                        <input class="form-control" name="collections" value="<?php echo $data->collections; ?>" required>
                     </div>
 
                     <button type="submit" class="btn btn-default">Submit</button>
 
-                <?php
-                }?>
-
                 </form>
-
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@
 <div class="row">
 
     <div class="col-lg-12">
-        <h1 class="page-header">Collection Table</h1>
+        <h1 class="page-header">Collection Types</h1>
     </div>
    
 </div>
@@ -18,8 +18,10 @@
         <div class="panel panel-default">
             
             <div class="panel-heading">
-                <a href="<?php echo site_url('Society_collection_c/entry'); ?>" class="btn btn-success">Add Fees</a>
+                <a href="<?php echo site_url('Society_collection_c/index'); ?>" class="btn btn-success">Add Collection</a>
             </div>
+
+            <span class="confirm-div" style="float:right; color:green;"></span>
 
             <div class="panel-body">
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -43,8 +45,13 @@
                                 <tr> 
 
                                     <td><?php echo $row->sl_no; ?></td>
+
                                     <td><?php echo $row->collections; ?></td>
-                                    <td><a href="<?php echo site_url('Society_collection_c/edit_entry/'.$row->sl_no.'/'.$row->collections.''); ?>"><i class="fa fa-edit fa-fw fa-2x"></i></a></td>
+
+                                    <td><a href="<?php echo site_url('Society_collection_c/edit');?>?sl_no=<?php echo $row->sl_no;?>">
+                                            <i class="fa fa-edit fa-fw fa-2x"></i>
+                                        </a>
+                                    </td>
                                 
                                 </tr>
 
@@ -73,4 +80,19 @@ $(document).ready(function() {
         responsive: true
     });
 });
+</script>
+
+<script>
+   
+    $(document).ready(function() {
+
+    $('.confirm-div').hide();
+
+    <?php if($this->session->flashdata('msg')){ ?>
+
+    $('.confirm-div').html('<?php echo $this->session->flashdata('msg'); ?>').show();
+
+    });
+
+    <?php } ?>
 </script>

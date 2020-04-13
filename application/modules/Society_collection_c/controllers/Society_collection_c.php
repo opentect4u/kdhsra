@@ -20,101 +20,86 @@
 
         public function main()
         {
+            $result['data'] = $this->Society_collection_m->f_get_particulars("md_s_collection_type",Null,Null,0);
+
             $this->load->view('post_login/society/header');
-            $this->fetch_table();
-            $this->load->view('post_login/society/footer');
 
-        }
-
-        public function fetch_table()
-        {
-            $result['data'] = $this->Society_collection_m->fetch_table();
-            
             $this->load->view('s_collection_table', $result);
 
-        }
-
-
-        public function entry()
-        {
-
-            $this->load->view('post_login/society/header');
-            $this->load->view('s_collection_form');
             $this->load->view('post_login/society/footer');
 
         }
-
 
         public function index()
         {
-
-            if($this->session->userdata('loggedin'))
-            {
-                $created_by   =  $this->session->userdata('loggedin')->user_name; 
-            }
-
-            $created_dt       =     date('y-m-d H:i:s');
-
             if($_SERVER['REQUEST_METHOD']=="POST")
             {
-                $collections        =       $_POST['collections'];
-                //$date_c             =       $_POST['date_c'];
+                $data   =   array(
 
-                $this->Society_collection_m->new_collection($collections, $created_by, $created_dt);
+                    'collections'       =>  $this->input->post('collections'),
 
-                //echo $created_by; die;
+                    "created_by"        =>  $this->session->userdata('loggedin')->user_name,
 
-                echo "<script> alert('Successfully Submitted');
-                    document.location= 'main' </script>";
+                    "created_dt"        =>  date('y-m-d H:i:s')
+                );
+                
+                $this->Society_collection_m->f_insert("md_s_collection_type", $data);
+
+                $this->session->set_flashdata('msg', 'Successfully Added!');
+
+                redirect("Society_collection_c/main");
             
             }
             else
             {
 
-                echo "<script> alert('Sorry! Password Missmatch');
-                document.location= 'main' </script>";
+                $this->load->view('post_login/society/header');
+
+                $this->load->view('s_collection_form');
+
+                $this->load->view('post_login/society/footer');
 
             }
-
-        }
-
-        public function edit_entry($sl_no, $collections)
-        {
-
-            $this->load->view('post_login/society/header');
-
-            $result['data'] = $this->Society_collection_m->get_edit_data($sl_no);
-            $this->load->view('s_collection_edit', $result);
-
-            $this->load->view('post_login/society/footer');
 
         }
 
         public function edit()
         {
-
-            if($this->session->userdata('loggedin'))
-            {
-                $modified_by   =  $this->session->userdata('loggedin')->user_name; 
-            }
-
-            $modified_dt       =     date('y-m-d H:i:s');
-
             if($_SERVER['REQUEST_METHOD']=="POST")
             {
+                $where  =   array(
 
-                $sl_no             =       $_POST['sl_no'];
-                $collections       =       $_POST['collections'];
+                    'sl_no'       =>    $this->input->post('sl_no')
+                );
 
-                $this->Society_collection_m->edit_collection($sl_no, $collections, $modified_by, $modified_dt);
+                $data   =   array(
 
-                echo "<script> alert('Successfully Updated');
-                document.location= 'main' </script>";
-            }
-            else
+                    'collections'        =>  $this->input->post('collections'),
+
+                    "modified_by"        =>  $this->session->userdata('loggedin')->user_name,
+
+                    "modified_dt"        =>  date('y-m-d H:i:s')
+                );
+                
+                $this->Society_collection_m->f_edit("md_s_collection_type", $data,$where);
+
+                $this->session->set_flashdata('msg', 'Successfully Updated!');
+
+                redirect("Society_collection_c/main");
+            }else
             {
-                echo "<script> alert('Sorry! Try again');
-                document.location= 'main' </script>";
+                $where          = array(
+
+                    "sl_no"     =>  $this->input->get('sl_no')
+                );
+
+                $result['data'] = $this->Society_collection_m->f_get_particulars("md_s_collection_type",Null,$where,1);
+
+                $this->load->view('post_login/society/header');
+
+                $this->load->view('s_collection_edit', $result);
+
+                $this->load->view('post_login/society/footer');
             }
 
         }

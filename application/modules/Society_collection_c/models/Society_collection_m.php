@@ -5,46 +5,54 @@
     class Society_collection_m extends CI_Model
     {
 
-        public function fetch_table()
-        {
-            $this->db->select('*');
-            $data = $this->db->get('md_s_collection_type');
-			return $data->result();
+        //Select from any table
+        public function f_get_particulars($table_name, $select=NULL, $where=NULL, $flag) {
+        
+            if(isset($select)) {
+    
+                $this->db->select($select);
+    
+            }
+    
+            if(isset($where)) {
+    
+                $this->db->where($where);
+    
+            }
+    
+            $result		=	$this->db->get($table_name);
+    
+            if($flag == 1) {
+    
+                return $result->row();
+                
+            }else {
+    
+                return $result->result();
+    
+            }
+    
         }
 
-        public function new_collection($collections, $created_by, $created_dt)
-        {
+        //For inserting row
+        public function f_insert($table_name, $data_array) {
 
-            $value = array('collections' => $collections,
-                            'created_by'=>$created_by,
-                            'created_dt'=>$created_dt);
+            $this->db->insert($table_name, $data_array);
 
-            $this->db->insert('md_s_collection_type',$value);
-
+            return;
         }
 
-        public function get_edit_data($sl_no)
-        {
+        //For Editing row
 
-            $sql = $this->db->query("SELECT * FROM md_s_collection_type WHERE sl_no = $sl_no");
-            return $sql->result();
+        public function f_edit($table_name, $data_array, $where) {
 
-        }
+            $this->db->where($where);
 
+            $this->db->update($table_name, $data_array);
 
-        public function edit_collection($sl_no, $collections, $modified_by, $modified_dt)
-        {
-
-            $value = array('collections' => $collections,
-                            'modified_by'=>$modified_by,
-                            'modified_dt'=>$modified_dt);
-            
-            $this->db->where('sl_no',$sl_no);
-            $this->db->update('md_s_collection_type',$value);
+            return;
 
         }
-
-
 
     }
 

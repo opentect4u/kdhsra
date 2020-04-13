@@ -101,14 +101,14 @@
                             <ul class="nav nav-second-level">
 
                                 <li>
-                                    <a href="<?php echo site_url('Add_member_c/main'); ?>">Add Member</a>
+                                    <a href="<?php echo site_url('Add_member_c/main'); ?>">Member</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo site_url('Society_collection_c/main'); ?>">Add Collections</a>
+                                    <a href="<?php echo site_url('Society_collection_c/main'); ?>">Collection Type</a>
                                 </li>
-                                <li>
-                                    <a href="<?php echo site_url('User_academy_controller/s_main'); ?>">Add User</a>
-                                </li>
+                                <!--<li>
+                                    <a href="<?php //echo site_url('User_academy_controller/s_main'); ?>">User</a>
+                                </li>-->
 
                             </ul>
                             <!-- /nav-second-level -->
