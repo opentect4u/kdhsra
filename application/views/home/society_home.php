@@ -29,10 +29,8 @@
     
     <div class="col-lg-12 header-color">
 
-        <h1 class="page-header">Khardaha Sri Ramakrishna Ashram</h1>
-      <!--  <h1 class="page-header" style="text-align: right; width:50%;  display: inline-block;">Date: <?php //echo date('d/m/y');?> </h1> -->
-
-
+        <h1 class="page-header">Khardaha Sri Ramakrishna Sarada Sevashram</h1>
+      
     </div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">

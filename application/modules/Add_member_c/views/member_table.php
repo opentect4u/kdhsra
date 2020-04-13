@@ -8,7 +8,7 @@
 <div class="row">
 
     <div class="col-lg-12">
-        <h1 class="page-header">Member Table</h1>
+        <h1 class="page-header">Manage Members</h1>
     </div>
    
 </div>
@@ -18,19 +18,21 @@
         <div class="panel panel-default">
             
             <div class="panel-heading">
-                <a href="<?php echo site_url('Add_member_c/entry'); ?>" class="btn btn-success">Add Member</a>
+                <a href="<?php echo site_url('Add_member_c/index'); ?>" class="btn btn-success">Add Member</a>
             </div>
+
+            <span class="confirm-div" style="float:right; color:green;"></span>
 
             <div class="panel-body">
                 <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
                     <thead>
                         
                         <tr>
-                            <th>Member Id</th>
-                            <th>Member Name</th>                     
-                            <th>Contact No</th>
+                            <th>Member ID</th>
+                            <th>Name</th>                     
+                            <th>Subscription</th>
                             <th>Member Type</th>
-                            <th>Subscription (/m)</th>
+                            <th>Edit</th>
                         </tr>
 
                     </thead>
@@ -44,10 +46,23 @@
                                 <tr> 
                                     <td><?php echo $row->mem_id; ?></td>
                                     <td><?php echo $row->mem_name; ?></td>
-                                    <td><?php echo $row->phone_no; ?></td>
-                                    <td><?php echo $row->mem_type; ?></td>
                                     <td><?php echo $row->m_sub_amount; ?></td>
-                                    <td><a href="<?php echo site_url('Add_member_c/edit_entry/'.$row->mem_id.'/'.$row->mem_type.''); ?>"><i class="fa fa-edit fa-fw fa-2x"></i></a></td>
+                                    <td><?php if($row->mem_type=='L'){
+                                                    echo "Lifetime";
+                                                }else{
+                                                    echo "Regular";
+                                                }; 
+                                        ?>
+                                    </td>
+
+                                    <td><a href="<?php echo site_url('Add_member_c/edit')?>?member_id=<?php echo $row->mem_id; ?>"
+                                            data-toggle="tooltip"
+                                            data-placement="bottom"
+                                            title="Edit"
+                                        >   
+                                            <i class="fa fa-edit fa-fw fa-2x"></i>
+                                        </a>
+                                    </td>
                                 </tr>
 
                             <?php } 
@@ -71,4 +86,19 @@ $(document).ready(function() {
         responsive: true
     });
 });
+</script>
+
+<script>
+   
+    $(document).ready(function() {
+
+    $('.confirm-div').hide();
+
+    <?php if($this->session->flashdata('msg')){ ?>
+
+    $('.confirm-div').html('<?php echo $this->session->flashdata('msg'); ?>').show();
+
+    });
+
+    <?php } ?>
 </script>

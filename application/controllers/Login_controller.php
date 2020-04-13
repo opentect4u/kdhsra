@@ -61,18 +61,6 @@
                         $this->session->set_userdata('loggedin',$user_data);
                         $this->Login_model->f_insert_audit_trail($user_name);
                         $this->session->set_userdata('sl_no',$this->Login_model->f_audit_trail_value($user_name));
-                        //echo $user_name;
-                        //die;
-                        /*if($this->session->userdata('loggedin'))
-                        {
-                        
-                            $this->load->view('home/society_home.php');
-                        
-                        }
-                        else
-                        {
-                            redirect('Login_controller/login');
-                        } */
                         
                         redirect('Login_controller/login');
                         
@@ -80,14 +68,14 @@
                     else
                     {
                         //redirect('login_controller/login');
-                        echo "<script> alert('Password is Wrong!');
+                        echo "<script> alert('Invalid Password');
                         document.location= 'login' </script>";
                     }
 
                 }
                 else
                 {
-                    echo "<script> alert('Sorry! Not Valid User.');
+                    echo "<script> alert('Sorry! Not A Valid User.');
                         document.location= 'login' </script>";
                 }
 
@@ -106,10 +94,8 @@
 			if($this->session->userdata('loggedin'))
 			{
                 $user_name    =   $this->session->userdata('loggedin')->user_name;
-                //echo $user_name; die;
+               
                 $user_data = $this->Login_model->f_get_user_inf($user_name);
-
-                //var_dump($user_data->user_type); die;
 
                 if($user_data)
                 {
@@ -127,28 +113,21 @@
                         else
                         {
                             $this->load->view('login/login');
-                            //$this->load->view('login/new_login');
-
                         }
                     }
                     else
                     {
                         $this->load->view('login/login');
-                        //$this->load->view('login/new_login');
-
                     }
                 }
                 else
                 {
                     $this->load->view('login/login');
-                    //$this->load->view('login/new_login');
-
                 }
 			}
             else
             {
                 $this->load->view('login/login');
-                //$this->load->view('login/new_login');
                 
 			}
 		}

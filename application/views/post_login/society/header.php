@@ -101,7 +101,7 @@
                             <ul class="nav nav-second-level">
 
                                 <li>
-                                    <a href="<?php echo site_url('Add_member_c/main'); ?>">Add member</a>
+                                    <a href="<?php echo site_url('Add_member_c/main'); ?>">Add Member</a>
                                 </li>
                                 <li>
                                     <a href="<?php echo site_url('Society_collection_c/main'); ?>">Add Collections</a>

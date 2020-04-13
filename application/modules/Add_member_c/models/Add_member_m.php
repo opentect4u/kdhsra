@@ -4,70 +4,63 @@
 
     class Add_member_m extends CI_Model
     {
-
-        public function fetch_table()
-        {
-
-            $this->db->select('*');            
-            $data = $this->db->get('md_member');
-            return $data->result();  
+        //Select from any table
+        public function f_get_particulars($table_name, $select=NULL, $where=NULL, $flag) {
         
-            return $sql->row();
-
+            if(isset($select)) {
+    
+                $this->db->select($select);
+    
+            }
+    
+            if(isset($where)) {
+    
+                $this->db->where($where);
+    
+            }
+    
+            $result		=	$this->db->get($table_name);
+    
+            if($flag == 1) {
+    
+                return $result->row();
+                
+            }else {
+    
+                return $result->result();
+    
+            }
+    
         }
 
-        
+        //New Member ID
         public function new_mem_id()
         {
 
-            $sql = $this->db->query("SELECT max(mem_id) mem_id FROM md_member ");
+            $sql = $this->db->query("SELECT ifnull(max(mem_id),0) + 1 mem_id FROM md_member ");
             return $sql->row();
         }
 
+        //For inserting row
+        public function f_insert($table_name, $data_array) {
 
-        public function new_member($mem_id, $mem_name, $phone_no, $mem_type, $m_sub_amount, $created_by, $created_dt)
-        {
-            $value = array('mem_id' => $mem_id,
-                            'mem_name'=>$mem_name,
-                            'phone_no'=>$phone_no,
-                            'mem_type'=>$mem_type,
-                            'm_sub_amount'=>$m_sub_amount,
-                            'created_by'=> $created_by,
-                            'created_dt'=> $created_dt);
-            
-            $this->db->insert('md_member',$value);
-            
+            $this->db->insert($table_name, $data_array);
+
+            return;
         }
 
+        //For Editing row
 
-        public function get_mem_data($mem_id)
-        {
+        public function f_edit($table_name, $data_array, $where) {
 
-            $sql = $this->db->query("SELECT * FROM md_member WHERE mem_id = $mem_id");
-            return $sql->result();
+            $this->db->where($where);
+
+            $this->db->update($table_name, $data_array);
+
+            return;
 
         }
 
-
-        public function edit_member($mem_id, $mem_name, $phone_no, $mem_type, $m_sub_amount, $modified_by, $modified_dt)
-        {
-
-            $value = array(
-                            'mem_name'=>$mem_name,
-                            'phone_no'=>$phone_no,
-                            'mem_type'=>$mem_type,
-                            'm_sub_amount'=>$m_sub_amount,
-                            'modified_by'=> $modified_by,
-                            'modified_dt'=> $modified_dt);
-
-            $this->db->where('mem_id',$mem_id);            
-            $this->db->update('md_member',$value);
-
-        }
-
-
-
-        
     }
 
 ?>
