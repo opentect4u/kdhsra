@@ -19,99 +19,104 @@
 
         public function main()
         {
-            $this->load->view('post_login/society/header');
-            $this->fetch_table();
-            $this->load->view('post_login/society/footer');
-
-        }
-
-        public function fetch_table()
-        {
             $result['data'] = $this->S_daily_coll_m->fetch_table();
+
+            $this->load->view('post_login/society/header');
+
             $this->load->view('s_daily_coll_table', $result);
 
-        }
-
-
-        public function entry()
-        {
-			$result_details['member_data']  = $this->S_daily_coll_m->f_get_member(); // to get the values of "td_class" table
-			$result_details['collection_data']  = $this->S_daily_coll_m->f_get_collection(); // to get the values of "td_fees" table
-            //var_dump($result_details['member_data']); die;
-            //to create new transaction code for this date---
-            $trans_dt       =       date('y-m-d'); 
-            $result_details['trans_data'] = $this->S_daily_coll_m->new_transCd($trans_dt);
-
-            //var_dump($result_details['trans_data']); die;
-
-            $this->load->view('post_login/society/header');
-            $this->load->view('s_daily_coll_v', $result_details);
             $this->load->view('post_login/society/footer');
-
         }
-
-
-        public function f_get_member()
-        {
-            $mem_id =   $this->input->get('mem_id');
-			$member_details  = $this->S_daily_coll_m->get_member_name($mem_id); // to get the values of "td_class" table
-            echo json_encode($member_details);
-
-        }
-
 
         public function index()
         {
-            if($this->session->userdata('loggedin'))
-            {
-                $created_by   =  $this->session->userdata('loggedin')->user_name; 
-            }
-
-            $created_dt       =     date('y-m-d H:i:s');
-
             if($_SERVER['REQUEST_METHOD']=="POST")
             {
-                
-                $trans_dt       =       $_POST['trans_dt'];
-                $trans_cd       =       $_POST['trans_cd'];
-                $fees_month     =       $_POST['fees_month'];
-                $fees_year      =       $_POST['fees_year'];
-                $mem_id         =       $_POST['mem_id'];
-                $mem_name       =       $_POST['mem_name'];
-                $collc_mode     =       $_POST['collc_mode'];
-                $bank_name      =       $_POST['bank_name'];
-                $draft_no       =       $_POST['draft_no'];
-                $neft_no        =       $_POST['neft_no'];
-                $total          =       $_POST['total'];
-                $remarks        =       $_POST['remarks'];
+
+                $trans_dt         =   $_POST['trn_dt'];
+
+                $trans_cd   =   $this->S_daily_coll_m->new_transCd($trans_dt);
+
+                $data   =   array(
+
+                    "trans_dt"       =>  $trans_dt,
+
+                    "trans_cd"       =>  $trans_cd->trans_cd,
+
+                    "fees_month"     =>  $this->input->post('fees_month'),
+
+                    "fees_year"      =>  $this->input->post('fees_year'),
+
+                    "mem_id"         =>  $this->input->post('mem_id'),
+
+                    "collc_mode"     =>  $this->input->post('collc_mode'),
+
+                    "total"          =>  $this->input->post('total'),
+
+                    "remarks"        =>  $this->input->post('remarks'),
+
+                    "created_by"     =>  $this->session->userdata('loggedin')->user_name,
+
+                    "created_dt"     =>  date('y-m-d H:i:s')
+                );
+
+                $this->S_daily_coll_m->f_insert("td_mem_collection", $data);
+
                 $collection_id  =       $_POST['collection_id'];
-                $collection_amount    =       $_POST['collection_amount'];
 
+                for($i=0;$i<count($collection_id);$i++){
 
-                $collection_count         =     count($collection_id);
+                    $values =   array(
+                        "trans_dt"              =>  $trans_dt,
 
-                //public function new_transCd($trans_dt);
-                //echo $trans_dt; die;
+                        "trans_cd"              =>  $trans_cd->trans_cd,
 
-                //echo $created_by; die;     
+                        "collection_id"         =>  $collection_id[$i],
 
-                $this->S_daily_coll_m->new_collection($trans_dt, $trans_cd, $fees_month, $fees_year, $mem_id, $mem_name,
-                                                $collc_mode, $bank_name, $draft_no, $neft_no, $total, $remarks, 
-                                                $created_by, $created_dt);
+                        "collection_amount"     =>  $this->input->post('collection_amount')[$i]
 
-                $this->S_daily_coll_m->new_fees_details($trans_dt, $trans_cd, $collection_id, $collection_amount, $collection_count, $created_by, $created_dt);
+                    );
 
-                echo "<script> alert('Successfully Submitted');
-                document.location= 'main' </script>";
+                    $this->S_daily_coll_m->f_insert("td_mem_collection_details", $values);
+                }
+
+                $this->session->set_flashdata('msg', 'Successfully Added!');
+
+                redirect("S_daily_coll_c/main");
 
             }
             else
             {
-                echo "<script> alert('Sorry! Try again');
-                document.location= 'main' </script>";
+                $result['colcType']  = $this->S_daily_coll_m->f_get_particulars("md_s_collection_type",NULL,NULL,0);
+
+                $this->load->view('post_login/society/header');
+
+                $this->load->view('s_daily_coll_v',$result);
+                
+                $this->load->view('post_login/society/footer');
             } 
 
         }
+
+//Get member name by supplying member id        
+        public function get_member()
+        {
+            $mem_id = $this->input->get('memId');
+
+            $select = array(
+                "mem_name"
+            );
+
+            $where  = array(
+                "mem_id"    => $mem_id
+            );
+
+            $member_details  = $this->S_daily_coll_m->f_get_particulars("md_member",$select,$where,1);
+            
+            echo json_encode($member_details);
+
+        }
+
 
 
         public function edit_entry($trans_dt, $trans_cd)

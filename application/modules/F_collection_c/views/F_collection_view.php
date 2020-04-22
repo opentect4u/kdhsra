@@ -483,7 +483,7 @@
                                                             var stu_name = JSON.parse(data);
                                                             
                                                             //    //var stu_name = value.stu_name;
-                                                            $('#stu_name').val(stu_name.stu_name); 
+                                                            $('#stu_name').val(stu_name.gender); 
                                                     
                                                             //    $('#stu_name').val(stu_name.stu_name); 
                                                         }

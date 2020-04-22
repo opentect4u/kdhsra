@@ -73,7 +73,9 @@
             else
             {
                 $this->load->view('post_login/society/header');
+
                 $this->load->view('member_form');
+                
                 $this->load->view('post_login/society/footer');
             }
 

@@ -5,16 +5,75 @@
     class S_daily_coll_m extends CI_Model
     {
 
+        //Select from any table
+        public function f_get_particulars($table_name, $select=NULL, $where=NULL, $flag) {
+        
+            if(isset($select)) {
+    
+                $this->db->select($select);
+    
+            }
+    
+            if(isset($where)) {
+    
+                $this->db->where($where);
+    
+            }
+    
+            $result		=	$this->db->get($table_name);
+    
+            if($flag == 1) {
+    
+                return $result->row();
+                
+            }else {
+    
+                return $result->result();
+    
+            }
+    
+        }
+
+        //For inserting row
+        public function f_insert($table_name, $data_array) {
+
+            $this->db->insert($table_name, $data_array);
+
+            return;
+        }    
+
+        //For Editing row
+
+        public function f_edit($table_name, $data_array, $where) {
+
+            $this->db->where($where);
+
+            $this->db->update($table_name, $data_array);
+
+            return;
+
+        }
+
         public function fetch_table()
         {
-            // will get data of current months - 
-
-            $sql = $this->db->query("SELECT * FROM td_mem_collection WHERE MONTH(trans_dt) = MONTH(CURRENT_DATE()) AND YEAR(trans_dt) = YEAR(CURRENT_DATE()) ");
+           
+            $sql = $this->db->query("SELECT a.trans_dt trans_dt,a.trans_cd trans_cd,
+                                            a.mem_id mem_id,b.mem_name mem_name,
+                                            a.total total 
+                                     FROM td_mem_collection a,md_member b
+                                     WHERE a.mem_id = b.mem_id
+                                     AND  MONTH(a.trans_dt) = MONTH(CURRENT_DATE()) 
+                                     AND YEAR(a.trans_dt)    = YEAR(CURRENT_DATE()) ");
             return $sql->result();
+        }
 
-            /*$this->db->select('*');
-            $data = $this->db->get('td_mem_collection');
-			return $data->result();*/
+        public function new_transCd($trans_dt)
+        {
+            $sql = $this->db->query("SELECT ifnull(max(trans_cd),0) + 1 trans_cd 
+                                     FROM td_mem_collection 
+                                     WHERE trans_dt = '$trans_dt'");
+
+            return $sql->row();
         }
 
         public function f_get_member()
@@ -33,12 +92,7 @@
         }
 
 
-        public function new_transCd($trans_dt)
-        {
-            $sql = $this->db->query("SELECT max(trans_cd) trans_cd FROM td_mem_collection WHERE trans_dt = '$trans_dt'");
-            return $sql->row();
-
-        }
+        
 
         public function get_member_name($mem_id)
         {
@@ -46,50 +100,6 @@
             return $sql->row();
 
         }
-
-        public function new_collection($trans_dt, $trans_cd, $fees_month, $fees_year, $mem_id, $mem_name,
-                                        $collc_mode, $bank_name, $draft_no, $neft_no, $total, $remarks, 
-                                        $created_by, $created_dt)
-        {
-
-            $value = array('trans_dt' => $trans_dt,
-                        'trans_cd' => $trans_cd,
-                        'fees_month' => $fees_month,
-                        'fees_year' => $fees_year,
-                        'mem_id' => $mem_id,
-                        'mem_name' => $mem_name,
-                        'collc_mode' => $collc_mode,
-                        'bank_name' => $bank_name,
-                        'draft_no' => $draft_no,
-                        'neft_no' => $neft_no,
-                        'total' => $total,
-                        'remarks' => $remarks,
-                        'created_by' => $created_by,
-                        'created_dt' => $created_dt);
-            
-            $this->db->insert('td_mem_collection',$value);
-
-        }
-
-        public function new_fees_details($trans_dt, $trans_cd, $collection_id, $collection_amount, $collection_count, $created_by, $created_dt)
-        {
-
-            for($i=0; $i<$collection_count; $i++)
-            {
-
-                $value = array('trans_dt' => $trans_dt,
-                                'trans_cd' => $trans_cd,
-                                'collection_id' => $collection_id[$i],
-                                'collection_amount' => $collection_amount[$i],
-                                'created_by' => $created_by,
-                                'created_dt' => $created_dt);
-
-                $this->db->insert('td_mem_collection_details',$value);
-
-            }
-
-        }
-
 
         public function f_get_edit_details($trans_dt, $trans_cd)
         {

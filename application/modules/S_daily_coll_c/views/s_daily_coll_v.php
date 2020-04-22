@@ -33,8 +33,8 @@
 
     <div class="panel-heading">
        <!-- <p align="right">Fees Entry Form</p> -->
-       <p style="text-align: left; width:49%; display: inline-block;">Member Collection Form</p>
-       <p style="text-align: right; width:50%;  display: inline-block;">Date: <?php echo date('d/m/y');?> </p>
+       <p style="text-align: left; width:49%; display: inline-block;">Member Collection</p>
+       <p style="text-align: right; width:50%;  display: inline-block;">Date: <?php echo date('d/m/Y');?> </p>
     </div>
 
     <div class="panel-body">
@@ -45,16 +45,21 @@
                 <div class="col-lg-3">  
 
                     <div class="form-group">
-                        <label>Payment For<font color="red">*</font></label>
-                        
-                      <!--  <input id="bday-month" class="form-control" type="month" name="fees_month" value="2018-12"> -->
-                      
+                        <label>Collection Date<font color="red">*</font></label>
+
+                        <input type="date" name="trn_dt" class="form-control" id= "trn_dt" value=<?php echo date('Y-m-d');?> required>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment For Month<font color="red">*</font></label>
+                         
                         <select class="form-control" name="fees_month" required >
-                            <option value= "">Select Month</option>
+                            <option value= "0">Select Month</option>
                             <option value= "1">January</option>
                             <option value= "2">February</option>
                             <option value= "3">March</option>
-                            <option value= "4">Appril</option>
+                            <option value= "4">April</option>
                             <option value= "5">May</option>
                             <option value= "6">June</option>
                             <option value= "7">July</option>
@@ -66,69 +71,43 @@
                         </select>
                         
                     </div>
-                    <br>
-                    <div class="form-group">
-                        <label>Member Id<font color="red">*</font></label>
 
-                        <input name="mem_id" class="form-control" id= "mem_id" placeholder="Member Id" required>
+                    <div class="form-group">
+                        <label>Member ID<font color="red">*</font></label>
+
+                        <input type="text" name="mem_id" class="form-control" id= "mem_id" placeholder="Member Id" required>
 
                     </div>
 
-                    <br>
                     <div class="form-group">
                         <label>Payment Mode<font color="red">*</font></label>
                         
                         <select class="form-control" name="collc_mode" id="collc_mode" required >
-                            <option value= "NULL">Payment by:</option>
-                            <option value= "cash">Cash</option>
-                            <option value= "draft">Draft</option>
-                            <option value= "neft">NEFT</option>
+                            <option value= "C">Cash</option>
+                            <option value= "Q">Cheque</option>
+                            <option value= "B">NEFT/RTGS</option>
                         </select>
-                    </div>
-
-                    <div class="form-group" id="bank_name">
-                        <label>Bank Name<font color="red">*</font></label>
-                            
-                        <input name="bank_name"  class="form-control" placeholder="Bank Name">
-                    
-                    </div>
-
-                    <div class="form-group" id="draft_no">
-
-                        <label>Draft No<font color="red">*</font></label>
-                            
-                        <input name="draft_no" class="form-control" placeholder="Draft No" >
-                    
-                    </div>
-
-                    <div class="form-group" id="neft_no">
-                        <label>NEFT No<font color="red">*</font></label>
-                        <input name="neft_no"  class="form-control" placeholder="NEFT No" >
-                    
                     </div>
 
                 </div>
 
-                <input type = "hidden" name="trans_dt" class="form-control" value= "<?php echo date('y-m-d');?>" readonly>
-                
-                <!-- for transaction code ---// using the reference "transCd" not "max(--)" function -->
-                <input type = "hidden" class = "form-control" name= "trans_cd" value= "<?php echo ($trans_data->trans_cd)+1;?>"/>
-
                 <div class="col-lg-3">
+
+                    <div></div>
+
+                    <br><br><br><br>
                     
                     <div class="form-group">
-                        <label>Payment For</label>
+                        <label>Payment For Year</label>
                         
-                        <input name="fees_year" class="form-control" placeholder="Year" value= "20<?php echo date('y');?>" readonly> 
-
+                        <input type="text" name="fees_year" class="form-control" placeholder="Year" value= "<?php echo date('Y'); ?>" readonly> 
+                    
                     </div>
 
-                    <br>
-
                     <div class="form-group">
-                        <label>Name<font color="red">*</font></label>
+                        <label>Name</label>
                         
-                        <input name="mem_name" id="mem_name" class="form-control" placeholder="Student Name" readonly>
+                        <input type="text" name="mem_name" id="mem_name" class="form-control" placeholder="Member Name" readonly>
                     </div>
 
                 </div>
@@ -139,7 +118,7 @@
                         
                         <div class="form-group">
                             <tr>
-                                <th>Collections</th>
+                                <th>Collection Type</th>
                                 <th>Amount</th>
                                 <th><button class="btn btn-success" type="button" id="addrow" data-toggle="tooltip" data-original-title="Add Row" data-placement="bottom"><i class="fa fa-plus" aria-hidden="true"></i></button></th>
                                 
@@ -148,36 +127,22 @@
                             <tbody id= "intro">
                                 <tr>
                                     <td>
-                                    
                                         <select class="form-control" name="collection_id[]" id="collection_id" required >
-                                            <option value= "">Select Collections</option>
+                                            <option value= "0">Select Collections</option>
 
-                                        <?php    
-                                            foreach($collection_data as $data)
-                                            { 
-                                            ?>
+                                            <?php foreach($colcType as $data){ ?>
                                                 <option value="<?php echo ($data->sl_no); ?>"><?php echo ($data->collections); ?></option>
-                                        <?php   
-                                            } 
-                                            ?>
+                                            <?php } ?>
                                         </select>
                                     
                                     </td>
                                     
                                     <td>
                                         
-                                        <input name="collection_amount[]" id="collection_amount" class="form-control amount_cls" placeholder="Amount" required>
-                                        
+                                        <input type="number" name="collection_amount[]" id="collection_amount" class="form-control amount_cls" placeholder="Amount" required>
                                     </td>
 
                                     <td></td>
-                                    
-                                   <!-- <td>
-                                        
-                                        <button class="btn btn-success" type="button" id="addrow" data-toggle="tooltip" data-original-title="Add Row" data-placement="bottom"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                                        
-                                    </td> -->
-
                                 </tr>
                             </tbody>
 
@@ -186,8 +151,8 @@
                                     <td>
                                         <strong>Total:</strong>
                                     </td>
-                                    <td colspan="2">
-                                        <input name="total" id="total" class="form-control" placeholder="Total" readonly>  
+                                    <td colspan="1">
+                                        <input type="number" name="total" id="total" class="form-control" placeholder="Total" readonly>  
                                     </td>
                                 </tr>
                             </tfoot>
@@ -202,10 +167,9 @@
                     <br><br>
                     <div class="form-group"> 
                         <label>Remarks</label>
-                        <textarea name="remarks" id="remarks" class="form-control" placeholder="Remarks"></textarea>
+                        <textarea rows="3" cols="50" name="remarks" id="remarks" class="form-control" placeholder="Remarks"></textarea>
                     </div>
-                    
-                    <br>
+
                     <div>
                        
                         <button type="submit" class="btn btn-primary">Submit</button>
@@ -223,19 +187,19 @@
 </div>
 
 
-   <script>
+<script>
 
     $(document).ready(function(){
 
-        //$("#fees_year").document.write(new Date().getFullYear());
-        
+//Add new year     
         $("#addrow").click(function(){
 
-            var newElement= '<tr><td><select class="form-control" name="collection_id[]" id="collection_id"><option value="">Select Collections</option><?php foreach($collection_data as $data){?><option value="<?php echo ($data->sl_no); ?>"><?php echo ($data->collections);?><?php } ?></select></td><td><input name="collection_amount[]" id="collection_amount" class="form-control amount_cls" placeholder="Amount" required></td><td><button class="btn btn-danger" type= "button" data-toggle="tooltip" data-original-title="Remove Row" data-placement="bottom" id="removeRow"><i class="fa fa-remove" aria-hidden="true"></i></button></td></tr>';
+            var newElement= '<tr><td><select class="form-control" name="collection_id[]" id="collection_id"><option value="">Select Collections</option><?php foreach($colcType as $data){?><option value="<?php echo ($data->sl_no); ?>"><?php echo ($data->collections);?><?php } ?></select></td><td><input name="collection_amount[]" id="collection_amount" class="form-control amount_cls" placeholder="Amount" required></td><td><button class="btn btn-danger" type= "button" data-toggle="tooltip" data-original-title="Remove Row" data-placement="bottom" id="removeRow"><i class="fa fa-remove" aria-hidden="true"></i></button></td></tr>';
                                                         
             $("#intro").append($(newElement));
                                                                 
         });
+
 
         // to change the value of total field as per fees field selected by adding rows
         
@@ -254,92 +218,23 @@
             $("#total").val(total);
       
         });
-        
-        
-        // to show and hide the banking fields as per payment mode selected
 
-        
-        $("#bank_name").hide()
-        $("#draft_no").hide()
-        $("#neft_no").hide() 
-        
-        
-        $('#collc_mode').on('change',function(){
+        $("#mem_id").on("change",function(){
 
-            var selection = $(this).val();
-            switch(selection)
-            {
-                
-                case "neft":
-                    $("#bank_name").show()
-                    $("#draft_no").hide()
-                    $("#neft_no").show()
-                    break;
+            var mem_id = $(this).val();
 
-                case "draft":
-                    $("#bank_name").show()
-                    $("#draft_no").show()
-                    $("#neft_no").hide()
-                    break;
+            $.get('<?php echo site_url("S_daily_coll_c/get_member"); ?>',{memId:mem_id})
 
-                case "cash":
-                    $("#bank_name").hide()
-                    $("#draft_no").hide()
-                    $("#neft_no").hide()
-                    break;
+                    .done(function(data){
 
-               /* default:
-                    $("#bank_name").hide()
-                    $("#draft_no").hide()
-                    $("#neft_no").hide() */
-                     
+                     var mem_data = JSON.parse(data);
+
+                    $("#mem_name").val(mem_data.mem_name);
                     
-                    
-            }
-
+                })
         });
-    
 
     });
 
 
-</script>   
-
-<script>
-
-    $(document).ready(function()
-                    {
-                        $('#mem_id').change(
-                                                function()
-                                                {
-
-                                                    //console.log(class_name); 
-                                                    
-                                                    $.get('<?php echo site_url("S_daily_coll_c/f_get_member");?>',{mem_id: $(this).val()} )
-                                                                                                                    
-                                                    //console.log(class_name); 
-                                                    .done( 
-                                                        function(data)
-                                                        {
-                                                            console.log(data);
-
-                                                                 var mem_name = JSON.parse(data);
-                                                                
-                                                                //    //var stu_name = value.stu_name;
-                                                                    $('#mem_name').val(mem_name.mem_name); 
-                                                        
-                                                                //    $('#stu_name').val(stu_name.stu_name); 
-
-                                                        }
-
-                                                    );
-
-                                                }
-
-                                            );
-
-                    });
-
-
 </script>
-
